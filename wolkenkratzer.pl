@@ -28,10 +28,10 @@ wolkenkratzer(Board, (Upper, Left, Bottom, Right), Max, DiagCheck) :-
     diagonal_(DiagCheck, Rows, ReversedRows),
 
     % apply pruning
-    maplist(pruned(N), Rows, Left),
-    maplist(pruned(N), ReversedRows, Right),
-    maplist(pruned(N), Columns, Upper),
-    maplist(pruned(N), ReversedColumns, Bottom),
+    maplist(pruned(Min,Max), Rows, Left),
+    maplist(pruned(Min,Max), ReversedRows, Right),
+    maplist(pruned(Min,Max), Columns, Upper),
+    maplist(pruned(Min,Max), ReversedColumns, Bottom),
 
     % check if all constraints are met
     maplist(skyscrapers, Rows, Left),
@@ -71,12 +71,22 @@ range(Low, High, []) :- High #=< Low.
 range(Low, High, [Low|Range]) :-
     High #> Low, Next #= Low + 1, range(Next, High, Range).
 
-% applies pruning laws to further constrain value domains
-pruned(_, _, 0) :- !.
-pruned(N, [N|_], 1) :- !.
-pruned(N, Line, N) :- N1 #= N + 1, range(1, N1, Line), !.
-pruned(N, Line, Tip) :- pruned_(N, Line, Tip), !.
+%% applies pruning laws to further constrain value domains
+% zero restrictions are ignored
+pruned(_, _, 0).
 
+% when tip is 1 and no parks are allowed, first cell is N
+pruned(1, N, [N|_], 1).
+
+% when tip is 1 and parks are allowerd, first cell is either Max or 0
+pruned(0, Max, [First|_], 1) :- First #= Max; First #= 0.
+
+% when tip is N, line is [1..N] (no parks)
+pruned(1, N, Sequence, N) :- End #= N + 1, range(1, End, Sequence).
+
+% when tip is some K, apply an upper bound to the whole line
+pruned(_, N, Line, Tip) :- pruned_(N, Line, Tip).
+pruned_(_, _, 0).
 pruned_(_, [], _).
 pruned_(N, [First|Rest], Tip) :-
     K is Tip - 1, First #=< N - K, pruned_(N, Rest, K).
