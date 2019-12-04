@@ -1,0 +1,32 @@
+O resolvedor encontra-se abstraído no predicado \textit{wolkenkratzer/4}, portanto para utilizar o programa é necessário iniciar o interpretador de Prolog (SWI-Prolog, neste caso) e carregar as definições.
+Em seguida, basta fornecer os parâmetros que definem uma instância do \textit{puzzle} e o sistema Prolog irá inferir as soluções existentes.
+Segue a seguir uma consulta exemplificando o uso do programa para o quebra-cabeça ilustrado na Figura \ref{fig:example}.
+Destaca-se que o programa também funciona para tabuleiros parcialmente resolvidos, bastando substituir valores conhecidos diretamente no tabuleiro.
+
+\begin{minted}[style=mannie]{prolog}
+%% consulta de entrada
+?- Board =  [[_,_,_,_,_],
+             [_,_,_,_,_],
+             [_,_,_,_,_],
+             [_,_,_,_,_],
+             [_,_,_,_,_]],
+   Board = [A,B,C,D,E],
+   wolkenkratzer(
+       Board,
+       (
+           [0,3,3,0,0], % borda superior
+           [1,4,3,2,0], % borda esquerda
+           [0,2,2,2,1], % borda inferior
+           [3,2,3,0,1]  % borda direita
+        ),
+       5, false % altura maxima 5, sem diagonais
+   ).
+
+%% saida fornecida no interpretador
+Board = [A,B,C,D,E],
+A = [5, 3, 1, 4, 2],
+B = [1, 2, 3, 5, 4],
+C = [3, 4, 5, 2, 1],
+D = [4, 5, 2, 1, 3],
+E = [2, 1, 4, 3, 5] .
+\end{minted}

@@ -1,0 +1,6 @@
+O programa implementado consiste em um quebra-cabeça, tornando evidente as vantagens da programação lógica-declarativa de Prolog com seus mecanismos automáticos de \textit{backtracking} e unificação.
+Além disso, o problema é naturalmente compatível com a programação de restrições ofertada na biblioteca \textit{clpfd}, visto que consiste, essencialmente, em gerar um tabuleiro preenchido com números inteiros que respeitem certas restrições.
+Assim, foi possível obter uma implementação boa e razoavelmente eficiente sem muito esforço e com um código curto e compreensível.
+
+A principal dificuldade foi escolher, a cada momento, entre a utilização dos predicados numéricos nativos da linguagem Prolog e os da biblioteca de restrições: onde seriam necessários e em que trechos não fariam diferença alguma.
+O uso do corte (\textit{!/0}) também foi considerado inicialmente, visando atingir melhor performance; percebeu-se, entretanto, que sua presença impedia a obtenção de múltiplas soluções do quebra-cabeça e em alguns casos fazia com que o programa não funcionasse corretamente.

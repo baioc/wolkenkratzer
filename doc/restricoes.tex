@@ -1,0 +1,29 @@
+A programação de restrições (\textit{Constraint Programming}) é um tipo de paradigma de programação utilizado para resolver problemas utilizando restrições definidas através de relações entre as entradas e saídas do programa.
+Diferente do paradigma imperativo, a programação de restrições não descreve os passos necessários para alcançar um resultado, mas dita as propriedades das possíveis soluções; tornando-se assim muito mais genérica.
+A compatibilidade da programação de restrições com o paradigma declarativo é evidente e muitas linguagens incluem bibliotecas ou até mesmo mecanismos nativos para possibilitar o uso dessas técnicas.
+
+Em Prolog, a programação de restrições é disponibilizada através da biblioteca \textit{clpfd} (\textit{Constraint Logic Programming over Finite Domains}) da implementação SWI-Prolog.
+A biblioteca é usada para propagar restrições no domínio dos números inteiros através de relações aritméticas como igualdades e inequações e é especialmente útil para resolver problemas combinatórios quando atrelada ao \textit{backtracking} automático da linguagem Prolog.
+Vale ressaltar que os predicados da \textit{clpfd} são muito mais poderosos e sofisticados do que os operadores nativos em Prolog que operam sobre números inteiros.
+
+\begin{minted}[style=mannie]{prolog}
+%% Constraint Logic Programming over Finite Domains
+:- use_module(library(clpfd)).
+
+%% exemplo de uso de restrições aritmeticas
+% restringe uma lista a sequencia ordenada dos inteiros em [Low, High)
+range(Low, High, []) :- High #=< Low.
+range(Low, High, [Low|Range]) :-
+    High #> Low, Next #= Low + 1, range(Next, High, Range).
+
+%% exemplo de restricao de pertencimento,
+% restringe todos os valores de Cells (uma lista) a um certo dominio
+Cells ins Min..Max.
+
+%% exemplo de restricao combinatoria
+% relaciona os elementos de uma lista de forma que sejam distintos entre si
+% isso eh aplicado sobre todas as listas em Rows (uma lista de listas)
+maplist(all_distinct, Rows).
+\end{minted}
+
+Neste trabalho utilizamos a programação de restrições para desenvolver um programa que resolve instâncias quaisquer do \textit{puzzle} \textit{Wolkenkratzer}.
